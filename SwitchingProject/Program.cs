@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SwitchingProject
@@ -24,11 +26,19 @@ namespace SwitchingProject
                 { "P9", "1000011*" }
             };
 
+            var dbFile = "db.txt";
+            if (File.Exists(dbFile))
+            {
+                db = File.ReadAllLines(dbFile)
+                    .Where(l => !string.IsNullOrEmpty(l) && Regex.Match(l, @"^.+,[01\*]+").Success)
+                    .ToDictionary(e => e.Split(',')[0], e => e.Split(',')[1]);
+            }
+
             // Assicurati che il db sia ordinato per lunghezza
             db = db.OrderBy(e => e.Value.Length).ToDictionary(e => e.Key, e => e.Value);
 
             // Per evitare di stampare i trie grafici, settare su false
-            var printGraph = false;
+            var printGraph = true;
 
             // Inizializzo il binary trie
             BinaryNode binaryRoot = new BinaryNode() { NextHop = "P1" };
@@ -39,8 +49,8 @@ namespace SwitchingProject
             }
             if (printGraph)
             {
-                Console.WriteLine();
                 BTreePrinter.Print(binaryRoot);
+                Console.WriteLine();
             } 
 
             // Inizializzo il compressed trie
@@ -53,8 +63,8 @@ namespace SwitchingProject
             compressedRoot.Compress();
             if (printGraph)
             {
-                Console.WriteLine();
                 CTreePrinter.Print(compressedRoot);
+                Console.WriteLine();
             }
 
             // Inizializzo il multibit trie
@@ -80,8 +90,18 @@ namespace SwitchingProject
                 "100001111" // P9
             };
 
+            // Caricali da file invece
+            var fileIPs = new string[] { };
+            var ipsFile = "ips.txt";
+            if (File.Exists(ipsFile))
+            {
+                fileIPs = File.ReadAllLines(ipsFile)
+                    .Where(l => !string.IsNullOrEmpty(l) && Regex.Match(l, @"^[01]*$").Success)
+                    .ToArray();
+            }
+
             Console.WriteLine();
-            foreach (var ip in defaultIPs)
+            foreach (var ip in fileIPs)
             {
                 Console.WriteLine($"Address: {ip}");
                 Console.WriteLine($"Binary: {binaryRoot.Lookup(ip)}");

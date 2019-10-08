@@ -74,12 +74,12 @@ namespace SwitchingProject.Nodes
             var child = Children[first];
 
             // (Qui ci arriviamo quando l'address è almeno lungo quanto la stride)
-            // Se è più lungo della stride, o non esiste un puntatore ad un altro nodo, ritorna il prefix
-            if (address.Length > Stride || child.Item2 == null)
+            // Se è lungo quanto la stride, o non esiste un puntatore ad un altro nodo, ritorna il prefix
+            if (address.Length == Stride || child.Item2 == null)
             {
                 return child.Item1;
             }
-            // Se invece abbiamo altri chunks ed esiste un puntatore
+            // Se invece è più lungo della stride e abbiamo un puntatore
             else
             {
                 return child.Item2.Lookup(address.Substring(Stride), child.Item1);
