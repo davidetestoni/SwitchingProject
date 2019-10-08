@@ -82,7 +82,7 @@ namespace SwitchingProject.Nodes
             // Se invece è più lungo della stride e abbiamo un puntatore
             else
             {
-                return child.Item2.Lookup(address.Substring(Stride), child.Item1);
+                return child.Item2.Lookup(address.Substring(Stride), child.Item1 == "" ? backtrack : child.Item1);
             }
         }
 

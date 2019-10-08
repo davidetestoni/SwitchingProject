@@ -129,7 +129,7 @@ namespace SwitchingProject.Nodes
             if (address.StartsWith("0"))
             {
                 // Se il figlio sinistro esiste, l'address è più lungo del segment, e il segment è vuoto o matcha
-                if (Left != null && address.Length > Left.Skip + 1 && (Left.Segment == "" || address.StartsWith("0" + Left.Segment)))
+                if (Left != null && address.Length >= Left.Skip + 1 && (Left.Segment == "" || address.StartsWith("0" + Left.Segment)))
                 {
                     return Left.Lookup(address.Substring(Left.Skip + 1), backtrack);
                 }
@@ -138,7 +138,7 @@ namespace SwitchingProject.Nodes
             else
             {
                 // Se il figlio destro esiste, l'address è più lungo del segment, e il segment è vuoto o matcha
-                if (Right != null && address.Length > Left.Skip + 1 && (Right.Segment == "" || address.StartsWith("1" + Right.Segment)))
+                if (Right != null && address.Length >= Right.Skip + 1 && (Right.Segment == "" || address.StartsWith("1" + Right.Segment)))
                 {
                     return Right.Lookup(address.Substring(Right.Skip + 1), backtrack);
                 }
