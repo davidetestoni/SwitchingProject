@@ -145,5 +145,47 @@ namespace SwitchingProject.Nodes
                 else return backtrack;
             }
         }
+
+        /// <summary>
+        /// Ritorna l'ultimo prefix di cui è figlio l'address, senza ricorsione (più veloce).
+        /// </summary>
+        /// <param name="address">L'address per cui trovare il prefix</param>
+        /// <param name="rootPrefix">Lasciare vuoto</param>
+        /// <returns>Il prefix</returns>
+        public override string LookupNonRecursive(string address, string rootPrefix = "")
+        {
+            var backtrack = "";
+            var partialAddress = address;
+            var node = this;
+
+            // Ciclo finchè l'address non si svuota
+            while (node != null)
+            {
+                if (node.NextHop != "") backtrack = node.NextHop;
+
+                if (partialAddress == "" || (node.Left == null && node.Right == null)) return backtrack;
+
+                if (partialAddress.StartsWith("0"))
+                {
+                    if (node.Left != null && partialAddress.Length >= node.Left.Skip + 1 && (node.Left.Segment == "" || partialAddress.StartsWith("0" + node.Left.Segment)))
+                    {
+                        partialAddress = partialAddress.Substring(node.Left.Skip + 1);
+                        node = node.Left;
+                    }
+                    else return backtrack;
+                }
+                else
+                {
+                    if (node.Right != null && partialAddress.Length >= node.Right.Skip + 1 && (node.Right.Segment == "" || partialAddress.StartsWith("0" + node.Right.Segment)))
+                    {
+                        partialAddress = partialAddress.Substring(node.Right.Skip + 1);
+                        node = node.Right;
+                    }
+                    else return backtrack;
+                }
+            }
+
+            return backtrack;
+        }
     }
 }

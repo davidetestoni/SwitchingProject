@@ -86,6 +86,44 @@ namespace SwitchingProject.Nodes
             }
         }
 
+        /// <summary>
+        /// Ritorna l'ultimo prefix di cui è figlio l'address, senza ricorsione (più veloce).
+        /// </summary>
+        /// <param name="address">L'address per cui trovare il prefix</param>
+        /// <param name="rootPrefix">Il nome del prefisso del nodo root</param>
+        /// <returns>Il prefix</returns>
+        public override string LookupNonRecursive(string address, string rootPrefix)
+        {
+            var backtrack = rootPrefix;
+            var partialAddress = address;
+            var node = this;
+
+            // Ciclo finchè l'address non si svuota
+            while (node != null)
+            {
+                if (partialAddress.Length < Stride) return backtrack;
+
+                var first = partialAddress.Substring(0, Stride);
+
+                if (partialAddress.Length < Stride || !node.Children.ContainsKey(first)) return backtrack;
+
+                var child = node.Children[first];
+
+                if (partialAddress.Length == Stride || child.Item2 == null)
+                {
+                    return child.Item1;
+                }
+                else
+                {
+                    partialAddress = partialAddress.Substring(Stride);
+                    if (child.Item1 != "") backtrack = child.Item1;
+                    node = child.Item2;
+                }
+            }
+
+            return backtrack;
+        }
+
         private string[] Split(string address)
         {
             if (address.Length < Stride) return new string[] { address };

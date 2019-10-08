@@ -17,5 +17,10 @@ namespace SwitchingProject.Nodes
         {
             throw new NotImplementedException();
         }
+
+        public virtual string LookupNonRecursive(string address, string rootPrefix)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace SwitchingProject
             db = db.OrderBy(e => e.Value.Length).ToDictionary(e => e.Key, e => e.Value);
 
             // Per evitare di stampare i trie grafici, settare su false
-            var printGraph = true;
+            var printGraph = false;
 
             // Inizializzo il binary trie
             BinaryNode binaryRoot = new BinaryNode() { NextHop = "P1" };
@@ -105,8 +105,11 @@ namespace SwitchingProject
             {
                 Console.WriteLine($"Address: {ip}");
                 Console.WriteLine($"Binary: {binaryRoot.Lookup(ip)}");
+                Console.WriteLine($"Binary (Non Recursive): {binaryRoot.LookupNonRecursive(ip)}");
                 Console.WriteLine($"Compressed: {compressedRoot.Lookup(ip)}");
+                Console.WriteLine($"Compressed (Non Recursive): {compressedRoot.LookupNonRecursive(ip)}");
                 Console.WriteLine($"Multibit: {multibitRoot.Lookup(ip, "P1")}");
+                Console.WriteLine($"Multibit (Non Recursive): {multibitRoot.LookupNonRecursive(ip, "P1")}");
                 Console.WriteLine();
             }
 
@@ -138,6 +141,16 @@ namespace SwitchingProject
             watch.Stop();
             Console.WriteLine($"Binary: {watch.ElapsedMilliseconds} ms");
 
+            // BINARY TRIE (NON RECURSIVE)
+            watch.Reset();
+            watch.Start();
+            foreach (var ip in ips)
+            {
+                lookupResult = binaryRoot.LookupNonRecursive(ip);
+            }
+            watch.Stop();
+            Console.WriteLine($"Binary (Non Recursive): {watch.ElapsedMilliseconds} ms");
+
             // COMPRESSED TRIE
             watch.Reset();
             watch.Start();
@@ -148,6 +161,16 @@ namespace SwitchingProject
             watch.Stop();
             Console.WriteLine($"Compressed: {watch.ElapsedMilliseconds} ms");
 
+            // COMPRESSED TRIE (NON RECURSIVE)
+            watch.Reset();
+            watch.Start();
+            foreach (var ip in ips)
+            {
+                lookupResult = compressedRoot.LookupNonRecursive(ip);
+            }
+            watch.Stop();
+            Console.WriteLine($"Compressed (Non Recursive): {watch.ElapsedMilliseconds} ms");
+
             // MULTIBIT
             watch.Reset();
             watch.Start();
@@ -157,6 +180,16 @@ namespace SwitchingProject
             }
             watch.Stop();
             Console.WriteLine($"Multibit: {watch.ElapsedMilliseconds} ms");
+
+            // MULTIBIT (NON RECURSIVE)
+            watch.Reset();
+            watch.Start();
+            foreach (var ip in ips)
+            {
+                lookupResult = multibitRoot.LookupNonRecursive(ip, "P1");
+            }
+            watch.Stop();
+            Console.WriteLine($"Multibit (Non Recursive): {watch.ElapsedMilliseconds} ms");
 
             Console.ReadLine();
         }
