@@ -44,9 +44,16 @@ namespace SwitchingProject.Nodes
             // Altrimenti, se ci sono ulteriori chunks
             else
             {
-                // Se non esiste, crealo, altrimenti setta solamente il puntatore
-                if (!Children.ContainsKey(first)) Children[first] = ("", new MultibitNode());
-                else Children[first] = (Children[first].Item1, new MultibitNode());
+                // Se non esiste, crealo
+                if (!Children.ContainsKey(first)) 
+                {
+                    Children[first] = ("", new MultibitNode());
+                }
+                // Se invece esiste e non ha un puntatore (nodo leaf)
+                else if (Children[first].Item1 == null)
+                {
+                    Children[first] = (Children[first].Item1, new MultibitNode());
+                }
 
                 // Chiama di nuovo il metodo sul figlio
                 Children[first].Item2.AddChild(prefix, path.Substring(Stride));
