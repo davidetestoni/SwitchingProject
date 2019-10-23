@@ -50,7 +50,7 @@ namespace SwitchingProject.Nodes
                     Children[first] = ("", new MultibitNode());
                 }
                 // Se invece esiste e non ha un puntatore (nodo leaf)
-                else if (Children[first].Item1 == null)
+                else if (Children[first].Item2 == null)
                 {
                     Children[first] = (Children[first].Item1, new MultibitNode());
                 }
