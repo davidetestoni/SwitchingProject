@@ -56,14 +56,13 @@ namespace IPLookupTool.Dialogs
             }
 
             var ips = new AddressGenerator()
-                .GenerateMaskedIP(
+                .GenerateAddress(
                     (int)minOctet1.Value, (int)maxOctet1.Value,
                     (int)minOctet2.Value, (int)maxOctet2.Value,
                     (int)minOctet3.Value, (int)maxOctet3.Value,
                     (int)minOctet4.Value, (int)maxOctet4.Value,
                     (int)minMask.Value, (int)maxMask.Value)
-                .Take((int)amount.Value)
-                .Select(i => new Address(i));
+                .Take((int)amount.Value);
 
             if (Target == LoadTarget.Database)
             {

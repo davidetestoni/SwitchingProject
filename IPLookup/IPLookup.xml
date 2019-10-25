@@ -53,12 +53,11 @@
             </summary>
             <returns>An IEnumerable with random binary strings.</returns>
         </member>
-        <member name="M:IPLookup.AddressGenerator.GenerateMaskedIP(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:IPLookup.AddressGenerator.GenerateAddress(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             Generates a random IPv4 address with a 1 to 32 bit mask.
             </summary>
-            <example>1.1.1.1\24</example>
-            <returns>An IEnumerable with random IPs.</returns>
+            <returns>An IEnumerable with random Addresses.</returns>
         </member>
         <member name="T:IPLookup.Nodes.BinaryNode">
             <summary>

@@ -34,9 +34,8 @@ namespace IPLookup
         /// <summary>
         /// Generates a random IPv4 address with a 1 to 32 bit mask.
         /// </summary>
-        /// <example>1.1.1.1\24</example>
-        /// <returns>An IEnumerable with random IPs.</returns>
-        public IEnumerable<string> GenerateMaskedIP(
+        /// <returns>An IEnumerable with random Addresses.</returns>
+        public IEnumerable<Address> GenerateAddress(
             int minOctet1 = 1, int maxOctet1 = 255,
             int minOctet2 = 0, int maxOctet2 = 255,
             int minOctet3 = 0, int maxOctet3 = 255,
@@ -45,12 +44,12 @@ namespace IPLookup
         {
             while (true)
             {
-                yield return
+                yield return new Address(
                     Rand.Next(minOctet1, maxOctet1 + 1) + "." +
                     Rand.Next(minOctet2, maxOctet2 + 1) + "." +
                     Rand.Next(minOctet3, maxOctet3 + 1) + "." +
                     Rand.Next(minOctet4, maxOctet4 + 1) + "/" +
-                    Rand.Next(minMask, maxMask);
+                    Rand.Next(minMask, maxMask));
             }
         }
     }

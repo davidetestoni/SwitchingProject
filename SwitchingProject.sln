@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPLookup", "IPLookup\IPLook
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPLookupTool", "IPLookupTool\IPLookupTool.csproj", "{8A4CC8C1-0D1F-4397-A7CA-5495D659E7C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleExample", "ConsoleExample\ConsoleExample.csproj", "{33FB5FB3-FBBE-4425-8A8B-E701F7117989}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8A4CC8C1-0D1F-4397-A7CA-5495D659E7C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A4CC8C1-0D1F-4397-A7CA-5495D659E7C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A4CC8C1-0D1F-4397-A7CA-5495D659E7C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33FB5FB3-FBBE-4425-8A8B-E701F7117989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33FB5FB3-FBBE-4425-8A8B-E701F7117989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33FB5FB3-FBBE-4425-8A8B-E701F7117989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33FB5FB3-FBBE-4425-8A8B-E701F7117989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
