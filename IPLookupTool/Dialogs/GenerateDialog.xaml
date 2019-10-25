@@ -1,0 +1,71 @@
+﻿<Window x:Class="IPLookupTool.Dialogs.GenerateDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IPLookupTool.Dialogs"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="IP Address Generator" Height="450" Width="400">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+
+            <DockPanel>
+                <Label Content="Amount:" FontWeight="Bold"/>
+                <xctk:IntegerUpDown x:Name="amount" Width="100" Minimum="1" Maximum="1000000" Value="1000" HorizontalAlignment="Left" KeyDown="Amount_KeyDown"/>
+            </DockPanel>
+            <Label Content="IPv4" FontWeight="Bold" Foreground="DodgerBlue"/>
+            
+            <DockPanel>
+                <Label Content="Octet 1" FontWeight="Bold"/>
+                <Label Content="Min:" />
+                <xctk:IntegerUpDown x:Name="minOctet1" Width="50" Minimum="0" Maximum="255" Value="1" HorizontalAlignment="Left" />
+                <Label Content="Max:"/>
+                <xctk:IntegerUpDown x:Name="maxOctet1" Width="50" Minimum="0" Maximum="255" Value="255" HorizontalAlignment="Left"/>
+            </DockPanel>
+
+            <DockPanel>
+                <Label Content="Octet 2" FontWeight="Bold"/>
+                <Label Content="Min:" />
+                <xctk:IntegerUpDown x:Name="minOctet2" Width="50" Minimum="0" Maximum="255" Value="0" HorizontalAlignment="Left" />
+                <Label Content="Max:"/>
+                <xctk:IntegerUpDown x:Name="maxOctet2" Width="50" Minimum="0" Maximum="255" Value="255" HorizontalAlignment="Left"/>
+            </DockPanel>
+
+            <DockPanel>
+                <Label Content="Octet 3" FontWeight="Bold"/>
+                <Label Content="Min:" />
+                <xctk:IntegerUpDown x:Name="minOctet3" Width="50" Minimum="0" Maximum="255" Value="0" HorizontalAlignment="Left" />
+                <Label Content="Max:"/>
+                <xctk:IntegerUpDown x:Name="maxOctet3" Width="50" Minimum="0" Maximum="255" Value="255" HorizontalAlignment="Left"/>
+            </DockPanel>
+
+            <DockPanel>
+                <Label Content="Octet 4" FontWeight="Bold"/>
+                <Label Content="Min:" />
+                <xctk:IntegerUpDown x:Name="minOctet4" Width="50" Minimum="0" Maximum="255" Value="0" HorizontalAlignment="Left" />
+                <Label Content="Max:"/>
+                <xctk:IntegerUpDown x:Name="maxOctet4" Width="50" Minimum="0" Maximum="255" Value="255" HorizontalAlignment="Left"/>
+            </DockPanel>
+
+            <Label Content="Mask" FontWeight="Bold" Foreground="DodgerBlue"/>
+            <DockPanel>
+                <Label Content="Min:" />
+                <xctk:IntegerUpDown x:Name="minMask" Width="50" Minimum="1" Maximum="32" Value="1" HorizontalAlignment="Left" />
+                <Label Content="Max:"/>
+                <xctk:IntegerUpDown x:Name="maxMask" Width="50" Minimum="1" Maximum="32" Value="32" HorizontalAlignment="Left"/>
+            </DockPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+            
+        </StackPanel>
+
+        <Button x:Name="acceptButton" Grid.Row="2" Content="ACCEPT" Margin="5" Padding="10 5" Click="AcceptButton_Click"/>
+    </Grid>
+</Window>

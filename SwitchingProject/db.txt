@@ -1,9 +1,0 @@
-﻿// Il root viene definito in automatico
-P2,1*
-P3,00*
-P4,101*
-P5,111*
-P6,1000*
-P7,11101*
-P8,111001*
-P9,1000011*

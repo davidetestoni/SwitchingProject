@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IPLookup</name>
+    </assembly>
+    <members>
+        <member name="T:IPLookup.Address">
+            <summary>
+            An IP address with mask.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Address.MaskedIPv4">
+            <summary>
+            The IPv4 with the mask e.g. 1.1.1.1/24
+            </summary>
+        </member>
+        <member name="P:IPLookup.Address.IPv4">
+            <summary>
+            The IPv4 without mask.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Address.Mask">
+            <summary>
+            The subnet mask.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Address.BinaryString">
+            <summary>
+            The IP as a binary string made of 0s and 1s.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Address.#ctor(System.String)">
+            <summary>
+            Creates an address from a masked string.
+            </summary>
+            <param name="maskedIP">The masked IP string in this format: 1.1.1.1/24</param>
+        </member>
+        <member name="M:IPLookup.Address.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates an address from a string and a mask.
+            </summary>
+            <param name="ip">The address in this format: 1.1.1.1</param>
+            <param name="mask">The mask (must be between 1 and 32)</param>
+        </member>
+        <member name="T:IPLookup.AddressGenerator">
+            <summary>
+            Generates random addresses.
+            </summary>
+        </member>
+        <member name="M:IPLookup.AddressGenerator.GenerateBin">
+            <summary>
+            Generates strings of 0s and 1s that can be 1 to 32 characters long.
+            </summary>
+            <returns>An IEnumerable with random binary strings.</returns>
+        </member>
+        <member name="M:IPLookup.AddressGenerator.GenerateMaskedIP(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Generates a random IPv4 address with a 1 to 32 bit mask.
+            </summary>
+            <example>1.1.1.1\24</example>
+            <returns>An IEnumerable with random IPs.</returns>
+        </member>
+        <member name="T:IPLookup.Nodes.BinaryNode">
+            <summary>
+            A node of a binary trie.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.BinaryNode.Left">
+            <summary>
+            The left child.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.BinaryNode.Right">
+            <summary>
+            The right child.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.BinaryNode.NextHop">
+            <summary>
+            The next hop information in case this node has one.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Nodes.BinaryNode.AddChild(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IPLookup.Nodes.BinaryNode.Lookup(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IPLookup.Nodes.BinaryNode.LookupNonRecursive(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:IPLookup.Nodes.CompressedNode">
+            <summary>
+            A node of a compressed trie.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.CompressedNode.Left">
+            <summary>
+            The left child.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.CompressedNode.Right">
+            <summary>
+            The right child.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.CompressedNode.NextHop">
+            <summary>
+            The next hop information in case this node has one.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.CompressedNode.Skip">
+            <summary>
+            How many bits have been compressed.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.CompressedNode.Segment">
+            <summary>
+            The segment that has been compressed.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Nodes.CompressedNode.Compress(System.String)">
+            <summary>
+            Compresses the trie after all children have been added.
+            </summary>
+            <param name="segment">Leave blank</param>
+            <returns>The compressed root.</returns>
+        </member>
+        <member name="M:IPLookup.Nodes.CompressedNode.AddChild(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IPLookup.Nodes.CompressedNode.Lookup(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IPLookup.Nodes.CompressedNode.LookupNonRecursive(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:IPLookup.Nodes.MultibitNode">
+            <summary>
+            A node of a multibit trie.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.MultibitNode.Stride">
+            <summary>
+            The amount of bits to use for the node's dictionary.
+            </summary>
+        </member>
+        <member name="P:IPLookup.Nodes.MultibitNode.Children">
+            <summary>
+            The dictionary that assigns to each Stride-long combination a next hop and / or a child node.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Nodes.MultibitNode.AddChild(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IPLookup.Nodes.MultibitNode.Lookup(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IPLookup.Nodes.MultibitNode.LookupNonRecursive(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:IPLookup.Nodes.Node">
+            <summary>
+            A node of a generic trie.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Nodes.Node.AddChild(System.String,System.String)">
+            <summary>
+            Adds a node to the trie.
+            </summary>
+            <param name="prefix">The next hop information</param>
+            <param name="path">The address as a string of 0s and 1s.</param>
+        </member>
+        <member name="M:IPLookup.Nodes.Node.Lookup(System.String,System.String)">
+            <summary>
+            Returns the last node with a valid next hop that matches the given address.
+            </summary>
+            <param name="address">The address for which to find the next hop</param>
+            <param name="backtrack">The last visited node with a valid next hop, leave blank if not a multibit trie</param>
+            <returns>The next hop</returns>
+        </member>
+        <member name="M:IPLookup.Nodes.Node.LookupNonRecursive(System.String,System.String)">
+            <summary>
+            Returns the last node with a valid next hop that matches the given address without recursion.
+            </summary>
+            <param name="address">The address for which to find the next hop</param>
+            <param name="rootPrefix">Leave blank</param>
+            <returns>The next hop</returns>
+        </member>
+        <member name="T:IPLookup.Utils">
+            <summary>
+            Utility class.
+            </summary>
+        </member>
+        <member name="F:IPLookup.Utils.IPRegex">
+            <summary>
+            The valid regex pattern for an IPv4 (1.1.1.1)
+            </summary>
+        </member>
+        <member name="F:IPLookup.Utils.MaskedIPRegex">
+            <summary>
+            The valid regex pattern for a masked IPv4 (1.1.1.1/24)
+            </summary>
+        </member>
+        <member name="F:IPLookup.Utils.BinStringRegex">
+            <summary>
+            The valid regex pattern for a binary string that is 1 to 32 characters long.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Utils.IPToBinString(System.String)">
+            <summary>
+            Converts an IP string to a binary string.
+            </summary>
+            <param name="input">The IP string formatted like 1.1.1.1/24</param>
+            <returns>A string of 0s and 1s</returns>
+        </member>
+        <member name="M:IPLookup.Utils.SplitInChunks(System.String,System.Int32)">
+            <summary>
+            Splits a string into chunks that have a maximum size.
+            </summary>
+            <remarks>This function is slow and should not be used during a lookup.</remarks>
+            <param name="input">The string to split</param>
+            <param name="size">The maximum chunk size</param>
+            <returns>The array of string chunks</returns>
+        </member>
+        <member name="T:IPLookup.Visualization.BinaryTreePrinter">
+            <summary>
+            Prints a binary tree to the console.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Visualization.BinaryTreePrinter.Print(IPLookup.Nodes.BinaryNode,System.Int32,System.Int32)">
+            <summary>
+            Prints the binary tree.
+            </summary>
+            <param name="root">The root node of the tree</param>
+            <param name="topMargin">The amount of lines to leave at the top of the tree</param>
+            <param name="leftMargin">The amount of spaces to leave at the left of the tree</param>
+        </member>
+        <member name="T:IPLookup.Visualization.CompressedTreePrinter">
+            <summary>
+            Prints a  compressed tree to the console.
+            </summary>
+        </member>
+        <member name="M:IPLookup.Visualization.CompressedTreePrinter.Print(IPLookup.Nodes.CompressedNode,System.Int32,System.Int32)">
+            <summary>
+            Prints the compressed tree.
+            </summary>
+            <param name="root">The root node of the tree</param>
+            <param name="topMargin">The amount of lines to leave at the top of the tree</param>
+            <param name="leftMargin">The amount of spaces to leave at the left of the tree</param>
+        </member>
+    </members>
+</doc>

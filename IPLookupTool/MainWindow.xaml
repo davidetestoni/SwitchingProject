@@ -1,0 +1,130 @@
+﻿<Window x:Class="IPLookupTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:IPLookupTool"
+        mc:Ignorable="d"
+        Title="IP Lookup Tool v0.4" Height="600" Width="800" Closed="Window_Closed">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Padding" Value="10 5"></Setter>
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            </Style>
+        </Grid.Resources>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="150" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <Label Content="Database" FontWeight="Bold" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <Label Content="To Search" FontWeight="Bold"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+            <Button x:Name="databaseLoadButton" Content="Load" Click="DatabaseLoadButton_Click"/>
+            <Button x:Name="databaseGenerateButton" Content="Generate" Click="DatabaseGenerateButton_Click"/>
+            <Label Content="Multibit Stride:" />
+            <xctk:IntegerUpDown x:Name="strideValue" Width="50" Minimum="1" Maximum="32" Value="3" HorizontalAlignment="Left" ValueChanged="StrideValue_ValueChanged"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+            <Button x:Name="tosearchLoadButton" Content="Load" Click="TosearchLoadButton_Click"/>
+            <Button x:Name="tosearchGenerateButton" Content="Generate" Click="TosearchGenerateButton_Click"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="2" Grid.Column="0" Margin="5">
+            <TabItem Header="Binary">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TreeView x:Name="binaryTreeView" Grid.Row="0" SelectedItemChanged="BinaryTreeView_SelectedItemChanged" Margin="5"/>
+                    <Button x:Name="expandBinaryTreeView" Content="Expand Tree" Grid.Row="1" Click="ExpandBinaryTreeView_Click"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Compressed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TreeView x:Name="compressedTreeView" Grid.Row="0" SelectedItemChanged="CompressedTreeView_SelectedItemChanged"/>
+                    <Button x:Name="expandCompressedTreeView" Content="Expand Tree" Grid.Row="1" Click="ExpandCompressedTreeView_Click"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Multibit">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TreeView x:Name="multibitTreeView" Grid.Row="0" SelectedItemChanged="MultibitTreeView_SelectedItemChanged"/>
+                    <Button x:Name="expandMultibitTreeView" Content="Expand Tree" Grid.Row="1" Click="ExpandMultibitTreeView_Click"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <ListView x:Name="tosearchListView" Grid.Row="2" Grid.Column="1">
+            
+        </ListView>
+
+        <RichTextBox x:Name="logBox" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Consolas" IsReadOnly="True" VerticalScrollBarVisibility="Visible">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button x:Name="performanceTestButton" Content="Performance Test" Click="PerformanceTestButton_Click" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button x:Name="graphicTestButton" Content="Graphic Test" Click="GraphicTestButton_Click"/>
+            <Label Content="Samples:" />
+            <xctk:IntegerUpDown x:Name="samplesValue" Width="50" Minimum="1" Maximum="100" Value="5" HorizontalAlignment="Left"/>
+            <Label Content="Plotting options:" />
+            <CheckBox x:Name="plotBinary" IsChecked="True" Content="Binary" VerticalContentAlignment="Center" Margin="10 0 0 0" />
+            <CheckBox x:Name="plotCompressed" IsChecked="True" Content="Compressed" VerticalContentAlignment="Center" Margin="10 0 0 0" />
+            <CheckBox x:Name="plotMultibit" IsChecked="True" Content="Multibit" VerticalContentAlignment="Center" Margin="10 0 0 0" />
+            <CheckBox x:Name="plotNR" IsChecked="False" Content="Non Recursive" VerticalContentAlignment="Center" Margin="10 0 0 0" />
+            <CheckBox x:Name="plotRegression" IsChecked="False" Content="Regression" VerticalContentAlignment="Center" Margin="10 0 0 0"/>
+        </StackPanel>
+
+        <DockPanel Grid.Row="6" Grid.Column="0">
+            <Label x:Name="nodeInfoLabel" Content="Select a node to view its information"/>
+        </DockPanel>
+        
+        <DockPanel Grid.Row="6" Grid.Column="1">
+            <Label Content="Made by Davide Testoni and Emanuele Gallone" HorizontalAlignment="Right"/>
+        </DockPanel>
+    </Grid>
+</Window>
