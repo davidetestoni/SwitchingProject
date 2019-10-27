@@ -21,7 +21,7 @@ namespace IPLookup
         {
             while (true)
             {
-                var length = Rand.Next(1, 32);
+                var length = Rand.Next(1, 33);
                 var address = "";
                 for (var i = 0; i < length; i++)
                 {
@@ -49,7 +49,7 @@ namespace IPLookup
                     Rand.Next(minOctet2, maxOctet2 + 1) + "." +
                     Rand.Next(minOctet3, maxOctet3 + 1) + "." +
                     Rand.Next(minOctet4, maxOctet4 + 1) + "/" +
-                    Rand.Next(minMask, maxMask));
+                    Rand.Next(minMask, maxMask + 1));
             }
         }
     }
