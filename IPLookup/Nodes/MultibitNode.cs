@@ -82,7 +82,7 @@ namespace IPLookup.Nodes
             var first = address.Substring(0, Stride);
 
             // If the child does not exist, return the backtrack
-            if (address.Length < Stride || !Children.ContainsKey(first)) return backtrack;
+            if (!Children.ContainsKey(first)) return backtrack;
 
             // WE ARE HERE IF THE ADDRESS IS AT LEAST AS LONG AS THE STRIDE
 
@@ -113,7 +113,7 @@ namespace IPLookup.Nodes
 
                 var first = partialAddress.Substring(0, Stride);
 
-                if (partialAddress.Length < Stride || !node.Children.ContainsKey(first)) return backtrack;
+                if (!node.Children.ContainsKey(first)) return backtrack;
 
                 var child = node.Children[first];
                 node = child.Item2; // Added by Emanuele
