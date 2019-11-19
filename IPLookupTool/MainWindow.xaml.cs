@@ -213,6 +213,7 @@ namespace IPLookupTool
 
         private void DatabaseGenerateButton_Click(object sender, RoutedEventArgs e)
         {
+            Globals.Generate = new GenerateDialog();
             Globals.Generate.Target = LoadTarget.Database;
             Globals.Generate.ShowDialog();
         }
