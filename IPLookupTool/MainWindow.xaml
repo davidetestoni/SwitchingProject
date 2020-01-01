@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:IPLookupTool"
         mc:Ignorable="d"
-        Title="IP Lookup Tool v0.5" Height="600" Width="800" Closed="Window_Closed">
+        Title="IP Lookup Tool v0.6" Height="600" Width="800" Closed="Window_Closed">
     <Grid>
         <Grid.Resources>
             <Style TargetType="Button">
@@ -105,6 +105,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
             <Button x:Name="performanceTestButton" Content="Performance Test" Click="PerformanceTestButton_Click" />
+            <Button x:Name="maskTestButton" Content="Mask Test" Click="MaskTestButton_Click" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">

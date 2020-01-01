@@ -37,6 +37,13 @@ namespace IPLookupTool
             LogLine("Initialized"); 
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Globals.Generate.Close();
+            Environment.Exit(0);
+        }
+
+        #region Logging
         public void Log(string message = "", LogLevel level = LogLevel.Info)
         {
             switch (level)
@@ -66,7 +73,9 @@ namespace IPLookupTool
         {
             Log($"{message}{Environment.NewLine}", level);
         }
+        #endregion
 
+        #region Add and Update trees
         public void UpdateTreeViews()
         {
             UpdateBinaryTreeView(Globals.BinaryRoot);
@@ -196,7 +205,9 @@ namespace IPLookupTool
                 }
             }
         }
+        #endregion
 
+        #region Load and Generate
         private void DatabaseLoadButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -239,12 +250,18 @@ namespace IPLookupTool
             Globals.Generate.ShowDialog();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        public void UpdateToSearch()
         {
-            Globals.Generate.Close();
-            Environment.Exit(0);
-        }
+            tosearchListView.Items.Clear();
 
+            foreach (var address in Globals.ToSearch.OrderBy(a => a.Mask))
+            {
+                tosearchListView.Items.Add($"{address.MaskedIPv4} -> {address.BinaryString}");
+            }
+        }
+        #endregion
+
+        #region Expand trees
         private void ExpandBinaryTreeView_Click(object sender, RoutedEventArgs e)
         {
             foreach (TreeViewItem item in binaryTreeView.Items)
@@ -278,7 +295,9 @@ namespace IPLookupTool
                 SetExpanded(child, expanded);
             }
         }
+        #endregion
 
+        #region Node info
         private void BinaryTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var node = (e.NewValue as TreeViewItem).Tag as BinaryNode;
@@ -298,22 +317,16 @@ namespace IPLookupTool
             var node = (e.NewValue as TreeViewItem).Tag as MultibitNode;
             nodeInfoLabel.Content = $"";
         }
+        #endregion
 
+        #region Bindings
         private void StrideValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             Globals.MultibitStride = (int)e.NewValue;
         }
+        #endregion
 
-        public void UpdateToSearch()
-        {
-            tosearchListView.Items.Clear();
-
-            foreach (var address in Globals.ToSearch.OrderBy(a => a.Mask))
-            {
-                tosearchListView.Items.Add($"{address.MaskedIPv4} -> {address.BinaryString}");
-            }
-        }
-
+        #region Performance test
         private void PerformanceTestButton_Click(object sender, RoutedEventArgs e)
         {
             Stopwatch watch = new Stopwatch();
@@ -391,7 +404,9 @@ Multibit: {multibitNRTime} ms
 
             LogLine(results, LogLevel.Success);
         }
+        #endregion
 
+        #region Graphic tests
         private void GraphicTestButton_Click(object sender, RoutedEventArgs e)
         {
             var samples = (int)samplesValue.Value;
@@ -418,56 +433,74 @@ Multibit: {multibitNRTime} ms
                 */
 
                 // BINARY
-                watch.Restart();
-                foreach (var ip in ips)
+                if ((bool)plotBinary.IsChecked)
                 {
-                    Globals.BinaryRoot.Lookup(ip);
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.BinaryRoot.Lookup(ip);
+                    }
+                    binaryResults.Add(watch.ElapsedMilliseconds);
                 }
-                binaryResults.Add(watch.ElapsedMilliseconds);
 
                 // COMPRESSED
-                watch.Restart();
-                foreach (var ip in ips)
+                if ((bool)plotCompressed.IsChecked)
                 {
-                    Globals.CompressedRoot.Lookup(ip);
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.CompressedRoot.Lookup(ip);
+                    }
+                    compressedResults.Add(watch.ElapsedMilliseconds);
                 }
-                compressedResults.Add(watch.ElapsedMilliseconds);
 
                 // MULTIBIT
-                watch.Restart();
-                foreach (var ip in ips)
+                if ((bool)plotMultibit.IsChecked)
                 {
-                    Globals.MultibitRoot.Lookup(ip, "Root");
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.MultibitRoot.Lookup(ip, "Root");
+                    }
+                    multibitResults.Add(watch.ElapsedMilliseconds);
                 }
-                multibitResults.Add(watch.ElapsedMilliseconds);
 
                 /*
                  * NON RECURSIVE
                  */
 
                 // BINARY
-                watch.Restart();
-                foreach (var ip in ips)
+                if ((bool)plotBinary.IsChecked && (bool)plotNR.IsChecked)
                 {
-                    Globals.BinaryRoot.LookupNonRecursive(ip);
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.BinaryRoot.LookupNonRecursive(ip);
+                    }
+                    binaryNRResults.Add(watch.ElapsedMilliseconds);
                 }
-                binaryNRResults.Add(watch.ElapsedMilliseconds);
 
                 // COMPRESSED
-                watch.Restart();
-                foreach (var ip in ips)
+                if ((bool)plotCompressed.IsChecked && (bool)plotNR.IsChecked)
                 {
-                    Globals.CompressedRoot.LookupNonRecursive(ip);
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.CompressedRoot.LookupNonRecursive(ip);
+                    }
+                    compressedNRResults.Add(watch.ElapsedMilliseconds);
                 }
-                compressedNRResults.Add(watch.ElapsedMilliseconds);
 
                 // MULTIBIT
-                watch.Restart();
-                foreach (var ip in ips)
+                if ((bool)plotMultibit.IsChecked && (bool)plotNR.IsChecked)
                 {
-                    Globals.MultibitRoot.LookupNonRecursive(ip, "Root");
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.MultibitRoot.LookupNonRecursive(ip, "Root");
+                    }
+                    multibitNRResults.Add(watch.ElapsedMilliseconds);
                 }
-                multibitNRResults.Add(watch.ElapsedMilliseconds);
             }
 
             var xAxis = Enumerable.Range(1, samples)
@@ -475,10 +508,13 @@ Multibit: {multibitNRTime} ms
 
             var series = new SeriesCollection();
 
+            LogLine();
+
             // BINARY
             if ((bool)plotBinary.IsChecked)
             {
                 series.Add(new LineSeries() { Title = "Binary", Values = new ChartValues<long>(binaryResults) });
+                LogLine($"Binary: {string.Join(",", binaryResults)} (Slope: {GetSlope(xAxis, binaryResults)})");
 
                 if ((bool)plotRegression.IsChecked)
                 {
@@ -488,6 +524,7 @@ Multibit: {multibitNRTime} ms
                 if ((bool)plotNR.IsChecked)
                 {
                     series.Add(new LineSeries() { Title = "Binary (NR)", Values = new ChartValues<long>(binaryNRResults) });
+                    LogLine($"Binary (NR): {string.Join(",", binaryNRResults)} (Slope: {GetSlope(xAxis, binaryNRResults)})");
 
                     if ((bool)plotRegression.IsChecked)
                     {
@@ -495,11 +532,12 @@ Multibit: {multibitNRTime} ms
                     }
                 }
             }
-            
+
             // COMPRESSED
             if ((bool)plotCompressed.IsChecked)
             {
                 series.Add(new LineSeries() { Title = "Compressed", Values = new ChartValues<long>(compressedResults) });
+                LogLine($"Compressed: {string.Join(",", compressedResults)} (Slope: {GetSlope(xAxis, compressedResults)})");
 
                 if ((bool)plotRegression.IsChecked)
                 {
@@ -509,6 +547,7 @@ Multibit: {multibitNRTime} ms
                 if ((bool)plotNR.IsChecked)
                 {
                     series.Add(new LineSeries() { Title = "Compressed (NR)", Values = new ChartValues<long>(compressedNRResults) });
+                    LogLine($"Compressed (NR): {string.Join(",", compressedNRResults)} (Slope: {GetSlope(xAxis, compressedNRResults)})");
 
                     if ((bool)plotRegression.IsChecked)
                     {
@@ -521,6 +560,7 @@ Multibit: {multibitNRTime} ms
             if ((bool)plotMultibit.IsChecked)
             {
                 series.Add(new LineSeries() { Title = "Multibit", Values = new ChartValues<long>(multibitResults) });
+                LogLine($"Multibit: {string.Join(",", multibitResults)} (Slope: {GetSlope(xAxis, multibitResults)})");
 
                 if ((bool)plotRegression.IsChecked)
                 {
@@ -530,6 +570,7 @@ Multibit: {multibitNRTime} ms
                 if ((bool)plotNR.IsChecked)
                 {
                     series.Add(new LineSeries() { Title = "Multibit (NR)", Values = new ChartValues<long>(multibitNRResults) });
+                    LogLine($"Multibit (NR): {string.Join(",", multibitNRResults)} (Slope: {GetSlope(xAxis, multibitNRResults)})");
 
                     if ((bool)plotRegression.IsChecked)
                     {
@@ -542,21 +583,189 @@ Multibit: {multibitNRTime} ms
                 .Select(x => x.ToString())
                 .ToArray();
 
-            // Write to console at the end otherwise it might impact the timing
-            LogLine();
-            LogLine("RECURSIVE:");
-            LogLine($"Binary: {string.Join(",", binaryResults)} (Slope: {GetSlope(xAxis, binaryResults)})");
-            LogLine($"Compressed: {string.Join(",", compressedResults)} (Slope: {GetSlope(xAxis, compressedResults)})");
-            LogLine($"Multibit: {string.Join(",", multibitResults)} (Slope: {GetSlope(xAxis, multibitResults)})");
-
-            LogLine("NON RECURSIVE:");
-            LogLine($"Binary: {string.Join(",", binaryNRResults)} (Slope: {GetSlope(xAxis, binaryNRResults)})");
-            LogLine($"Compressed: {string.Join(",", compressedNRResults)} (Slope: {GetSlope(xAxis, compressedNRResults)})");
-            LogLine($"Multibit: {string.Join(",", multibitNRResults)} (Slope: {GetSlope(xAxis, multibitNRResults)})");
-
             (new GraphDialog(series, labels) { Title = $"Graph | Searched: {total} IPs | Samples: {samples}" }).Show();
         }
 
+        private void MaskTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            var masks = new int[] { 8, 16, 24, 32 };
+            var ips = Globals.ToSearch.Select(i => i.BinaryString);
+            var total = Globals.ToSearch.Count();
+
+            List<long> binaryResults = new List<long>();
+            List<long> compressedResults = new List<long>();
+            List<long> multibitResults = new List<long>();
+
+            List<long> binaryNRResults = new List<long>();
+            List<long> compressedNRResults = new List<long>();
+            List<long> multibitNRResults = new List<long>();
+
+            for (int i = 0; i < masks.Length; i++)
+            {
+                // Take the IP, apply the correct mask and get it as a binary string
+                ips = Globals.ToSearch.Select(ip => new Address(ip.IPv4, masks[i]).BinaryString).ToArray();
+                
+                var watch = new Stopwatch();
+
+                /*
+                * RECURSIVE
+                */
+
+                // BINARY
+                if ((bool)plotBinary.IsChecked)
+                {
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.BinaryRoot.Lookup(ip);
+                    }
+                    binaryResults.Add(watch.ElapsedMilliseconds);
+                }
+
+                // COMPRESSED
+                if ((bool)plotCompressed.IsChecked)
+                {
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.CompressedRoot.Lookup(ip);
+                    }
+                    compressedResults.Add(watch.ElapsedMilliseconds);
+                }
+
+                // MULTIBIT
+                if ((bool)plotMultibit.IsChecked)
+                {
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.MultibitRoot.Lookup(ip, "Root");
+                    }
+                    multibitResults.Add(watch.ElapsedMilliseconds);
+                }
+
+                /*
+                 * NON RECURSIVE
+                 */
+
+                // BINARY
+                if ((bool)plotBinary.IsChecked && (bool)plotNR.IsChecked)
+                {
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.BinaryRoot.LookupNonRecursive(ip);
+                    }
+                    binaryNRResults.Add(watch.ElapsedMilliseconds);
+                }
+
+                // COMPRESSED
+                if ((bool)plotCompressed.IsChecked && (bool)plotNR.IsChecked)
+                {
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.CompressedRoot.LookupNonRecursive(ip);
+                    }
+                    compressedNRResults.Add(watch.ElapsedMilliseconds);
+                }
+
+                // MULTIBIT
+                if ((bool)plotMultibit.IsChecked && (bool)plotNR.IsChecked)
+                {
+                    watch.Restart();
+                    foreach (var ip in ips)
+                    {
+                        Globals.MultibitRoot.LookupNonRecursive(ip, "Root");
+                    }
+                    multibitNRResults.Add(watch.ElapsedMilliseconds);
+                }
+            }
+
+            var xAxis = masks;
+
+            var series = new SeriesCollection();
+
+            LogLine();
+
+            // BINARY
+            if ((bool)plotBinary.IsChecked)
+            {
+                series.Add(new LineSeries() { Title = "Binary", Values = new ChartValues<long>(binaryResults) });
+                LogLine($"Binary: {string.Join(",", binaryResults)} (Slope: {GetSlope(xAxis, binaryResults)})");
+
+                if ((bool)plotRegression.IsChecked)
+                {
+                    series.Add(new LineSeries() { Title = "Binary (Regression)", Values = new ChartValues<double>(GetRegression(xAxis, binaryResults)) });
+                }
+
+                if ((bool)plotNR.IsChecked)
+                {
+                    series.Add(new LineSeries() { Title = "Binary (NR)", Values = new ChartValues<long>(binaryNRResults) });
+                    LogLine($"Binary (NR): {string.Join(",", binaryNRResults)} (Slope: {GetSlope(xAxis, binaryNRResults)})");
+
+                    if ((bool)plotRegression.IsChecked)
+                    {
+                        series.Add(new LineSeries() { Title = "Binary (NR) (Regression)", Values = new ChartValues<double>(GetRegression(xAxis, binaryNRResults)) });
+                    }
+                }
+            }
+
+            // COMPRESSED
+            if ((bool)plotCompressed.IsChecked)
+            {
+                series.Add(new LineSeries() { Title = "Compressed", Values = new ChartValues<long>(compressedResults) });
+                LogLine($"Compressed: {string.Join(",", compressedResults)} (Slope: {GetSlope(xAxis, compressedResults)})");
+
+                if ((bool)plotRegression.IsChecked)
+                {
+                    series.Add(new LineSeries() { Title = "Compressed (Regression)", Values = new ChartValues<double>(GetRegression(xAxis, compressedResults)) });
+                }
+
+                if ((bool)plotNR.IsChecked)
+                {
+                    series.Add(new LineSeries() { Title = "Compressed (NR)", Values = new ChartValues<long>(compressedNRResults) });
+                    LogLine($"Compressed (NR): {string.Join(",", compressedNRResults)} (Slope: {GetSlope(xAxis, compressedNRResults)})");
+
+                    if ((bool)plotRegression.IsChecked)
+                    {
+                        series.Add(new LineSeries() { Title = "Compressed (NR) (Regression)", Values = new ChartValues<double>(GetRegression(xAxis, compressedNRResults)) });
+                    }
+                }
+            }
+
+            // MULTIBIT
+            if ((bool)plotMultibit.IsChecked)
+            {
+                series.Add(new LineSeries() { Title = "Multibit", Values = new ChartValues<long>(multibitResults) });
+                LogLine($"Multibit: {string.Join(",", multibitResults)} (Slope: {GetSlope(xAxis, multibitResults)})");
+
+                if ((bool)plotRegression.IsChecked)
+                {
+                    series.Add(new LineSeries() { Title = "Multibit (Regression)", Values = new ChartValues<double>(GetRegression(xAxis, multibitResults)) });
+                }
+
+                if ((bool)plotNR.IsChecked)
+                {
+                    series.Add(new LineSeries() { Title = "Multibit (NR)", Values = new ChartValues<long>(multibitNRResults) });
+                    LogLine($"Multibit (NR): {string.Join(",", multibitNRResults)} (Slope: {GetSlope(xAxis, multibitNRResults)})");
+
+                    if ((bool)plotRegression.IsChecked)
+                    {
+                        series.Add(new LineSeries() { Title = "Multibit (NR) (Regression)", Values = new ChartValues<double>(GetRegression(xAxis, multibitNRResults)) });
+                    }
+                }
+            }
+
+            var labels = xAxis
+                .Select(x => x.ToString())
+                .ToArray();
+
+            (new GraphDialog(series, labels) { Title = $"Mask Test | Searched: {total} IPs" }).Show();
+        }
+        #endregion
+
+        #region Utilities
         private double[] GetRegression(IEnumerable<int> xAxis, IEnumerable<long> yAxis)
         {
             double rSquared, intercept, slope;
@@ -591,8 +800,10 @@ Multibit: {multibitNRTime} ms
 
             return slope;
         }
+        #endregion
     }
 
+    #region Extensions
     public static class RichTextBoxExtensions
     {
         public static void AppendText(this RichTextBox box, string text, Color color)
@@ -602,4 +813,5 @@ Multibit: {multibitNRTime} ms
             tr.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color));
         }
     }
+    #endregion
 }
